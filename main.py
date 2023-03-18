@@ -57,6 +57,29 @@ def click(num):
 def operation():
     global OPERATOR
     try:
+        # Reemplaza las funciones con sus equivalentes en Python
+        OPERATOR = OPERATOR.replace('sqrt', 'sqrt(').replace('log', 'log(').replace('pi', 'pi(')
+        # Encuentra todos los paréntesis abiertos y les agrega un paréntesis de cierre
+        count_open = OPERATOR.count('(')
+        count_close = OPERATOR.count(')')
+        OPERATOR += ')' * (count_open - count_close)
+
+        # Convierte la cadena en una lista de términos y operadores
+        terms = re.split(r'([+\-*/()])', OPERATOR)
+
+        # Evalúa las funciones matemáticas en la lista
+        for i, term in enumerate(terms):
+            if term == 'sqrt(':
+                terms[i+1] = sqrt(float(terms[i+1]))
+            if term == 'log(':
+                terms[i+1] = log(float(terms[i+1]))
+            if term == 'pi(':
+                terms[i+1] = pi
+
+        # Reconstruye la cadena a partir de la lista modificada
+        OPERATOR = ''.join([str(term) for term in terms])
+
+        # Ahora evalúa la cadena con las funciones matemáticas ya aplicadas
         op = str(eval(OPERATOR))
         input_text.set(op)
     except:
